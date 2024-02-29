@@ -7,11 +7,16 @@ require("dotenv").config();
 const port = process.env.PORT;
 const cors = require("cors");
 // settting cors
-app.use(cors());
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",");
+app.use(
+  cors({
+    origin: allowedOrigins,
+  })
+);
 // socket io connection
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: allowedOrigins,
   },
 });
 const getReceiverSocketId = (receiverId) => {
