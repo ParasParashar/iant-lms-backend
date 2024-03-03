@@ -37,12 +37,14 @@ io.on("connection", (socket) => {
 
   // getting user messages
   socket.on("newMessages", (socketData) => {
-    const { receiverAuthId, message } = socketData;
-    const receiverSocketId = getReceiverSocketId(receiverAuthId);
-    const senderSocketId = getReceiverSocketId(message.senderId.authId);
+    // const { receiverAuthId, message } = socketData;
+    const receiverSocketId = getReceiverSocketId(socketData?.receiverAuthId);
+    const senderSocketId = getReceiverSocketId(
+      socketData?.message.senderId.authId
+    );
     if (receiverSocketId || senderSocketId) {
-      io.to(receiverSocketId).emit("receive-message", message);
-      io.to(senderSocketId).emit("receive-message", message);
+      io.to(receiverSocketId).emit("receive-message", socketData?.message);
+      io.to(senderSocketId).emit("receive-message", socketData?.message);
     }
   });
   // getting the group message
